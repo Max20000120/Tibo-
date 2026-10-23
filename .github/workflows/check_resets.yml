@@ -4,7 +4,12 @@ on:
   schedule:
     # 每 5 分鐘執行一次（GitHub Actions 允許的最小排程間隔）
     - cron: '*/5 * * * *'
-  workflow_dispatch: # 支援手動在 GitHub 後台點擊執行
+  workflow_dispatch:
+    inputs:
+      test_mode:
+        description: '立即發送一則測試通知至 Discord'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -34,9 +39,15 @@ jobs:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           DISCORD_MENTION: ${{ secrets.DISCORD_MENTION }}
         run: |
-          python check_resets.py
+          if [ "${{ inputs.test_mode }}" = "true" ]; then
+            echo "正在發送測試通知..."
+            python check_resets.py --test
+          else
+            python check_resets.py
+          fi
 
       - name: Commit and push if state changed
+        if: ${{ inputs.test_mode != 'true' }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
