@@ -99,6 +99,7 @@ python check_resets.py
    - （可選）如果需要 @everyone，可新增 `DISCORD_MENTION`。
 3. **完成！**
    - 專案已內建 `.github/workflows/check_resets.yml`，GitHub Actions 會每 5 分鐘自動執行一次，並在發現新重置時更新 `last_reset_id.txt` 自動推送到 Discord。
+   - **立即測試功能**：你可以在 GitHub 倉庫的 **Actions** 頁面，點選左側 **Check Codex Resets** ➔ 點擊右上角 **Run workflow**，勾選「立即發送一則測試通知至 Discord」，即可不用等重置就測試 Webhook 是否成功！
 
 ---
 
